@@ -52,6 +52,10 @@ func (s *linkedListStack) pop() any {
 			head.Next = nil
 			s.count--
 
+			if s.isEmpty() {
+				s.head.Next = nil
+				s.tail.Next = nil
+			}
 			return node
 		}
 		head = head.Next

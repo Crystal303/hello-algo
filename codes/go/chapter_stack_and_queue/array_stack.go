@@ -17,6 +17,11 @@ func newArrayStack() *arrayStack {
 	}
 }
 
+/* 需要缩容 */
+func (s *arrayStack) needsResize() bool {
+	return cap(s.data) > 16 && s.size()*100/cap(s.data) < 10
+}
+
 /* 栈的长度 */
 func (s *arrayStack) size() int {
 	return len(s.data)
@@ -36,6 +41,16 @@ func (s *arrayStack) push(v int) {
 /* 出栈 */
 func (s *arrayStack) pop() any {
 	val := s.peek()
+	if s.needsResize() {
+		size := s.size()
+		if s.size() < 16 {
+			size = 16
+		}
+		data := make([]int, size)
+		copy(data, s.data)
+		s.data = data
+	}
+
 	s.data = s.data[:len(s.data)-1]
 	return val
 }
