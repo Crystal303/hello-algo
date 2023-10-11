@@ -16,7 +16,7 @@ type hashMapOpenAddressing struct {
 	loadThres   float64 // 触发扩容的负载因子阈值
 	extendRatio int     // 扩容倍数
 	buckets     []pair  // 桶数组
-	removed     pair    // 删除标记
+	removed     []bool  // 删除标记
 }
 
 /* 构造方法 */
@@ -28,10 +28,7 @@ func newHashMapOpenAddressing() *hashMapOpenAddressing {
 		loadThres:   2.0 / 3.0,
 		extendRatio: 2,
 		buckets:     buckets,
-		removed: pair{
-			key: -1,
-			val: "-1",
-		},
+		removed:     make([]bool, 4),
 	}
 }
 
@@ -51,13 +48,13 @@ func (m *hashMapOpenAddressing) get(key int) string {
 	// 线性探测，从 index 开始向后遍历
 	for i := 0; i < m.capacity; i++ {
 		// 计算桶索引，越过尾部返回头部
-		j := (idx + 1) % m.capacity
+		j := (idx + i) % m.capacity
 		// 若遇到空桶，说明无此 key ，则返回 null
 		if m.buckets[j] == (pair{}) {
 			return ""
 		}
 		// 若遇到指定 key ，则返回对应 val
-		if m.buckets[j].key == key && m.buckets[j] != m.removed {
+		if m.buckets[j].key == key && !m.removed[j] {
 			return m.buckets[j].val
 		}
 	}
@@ -77,12 +74,13 @@ func (m *hashMapOpenAddressing) put(key int, val string) {
 		// 计算桶索引，越过尾部返回头部
 		j := (idx + i) % m.capacity
 		// 若遇到空桶、或带有删除标记的桶，则将键值对放入该桶
-		if m.buckets[j] == (pair{}) || m.buckets[j] == m.removed {
+		if m.buckets[j] == (pair{}) || m.removed[j] {
 			m.buckets[j] = pair{
 				key: key,
 				val: val,
 			}
 			m.size += 1
+			m.removed[j] = false
 			return
 		}
 		// 若遇到指定 key ，则更新对应 val
@@ -99,14 +97,14 @@ func (m *hashMapOpenAddressing) remove(key int) {
 	// 线性探测，从 index 开始向后遍历
 	for i := 0; i < m.capacity; i++ {
 		// 计算桶索引，越过尾部返回头部
-		j := (idx + 1) % m.capacity
+		j := (idx + i) % m.capacity
 		// 若遇到空桶，说明无此 key ，则直接返回
 		if m.buckets[j] == (pair{}) {
 			return
 		}
 		// 若遇到指定 key ，则标记删除并返回
 		if m.buckets[j].key == key {
-			m.buckets[j] = m.removed
+			m.removed[j] = true
 			m.size -= 1
 		}
 	}
@@ -117,14 +115,17 @@ func (m *hashMapOpenAddressing) extend() {
 	// 暂存原哈希表
 	tmpBuckets := make([]pair, len(m.buckets))
 	copy(tmpBuckets, m.buckets)
+	tmpRemoved := make([]bool, len(m.buckets))
+	copy(tmpRemoved, m.removed)
 
 	// 初始化扩容后的新哈希表
 	m.capacity *= m.extendRatio
 	m.buckets = make([]pair, m.capacity)
+	m.removed = make([]bool, m.capacity)
 	m.size = 0
 	// 将键值对从原哈希表搬运至新哈希表
-	for _, p := range tmpBuckets {
-		if p != (pair{}) && p != m.removed {
+	for i, p := range tmpBuckets {
+		if p != (pair{}) && !m.removed[i] {
 			m.put(p.key, p.val)
 		}
 	}
@@ -132,8 +133,8 @@ func (m *hashMapOpenAddressing) extend() {
 
 /* 打印哈希表 */
 func (m *hashMapOpenAddressing) print() {
-	for _, p := range m.buckets {
-		if p != (pair{}) {
+	for i, p := range m.buckets {
+		if p != (pair{}) && !m.removed[i] {
 			fmt.Println(strconv.Itoa(p.key) + " -> " + p.val)
 		} else {
 			fmt.Println("nil")
