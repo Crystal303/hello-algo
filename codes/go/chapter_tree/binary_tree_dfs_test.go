@@ -44,4 +44,7 @@ func TestPreInPostOrderTraversal(t *testing.T) {
 	nums = nil
 	postOrderIterate(root, &nums)
 	fmt.Println("\n后序遍历的节点打印序列 =", nums)
+	nums = nil
+	postOrderIterateV2(root, &nums)
+	fmt.Println("\n后序遍历的节点打印序列 =", nums)
 }

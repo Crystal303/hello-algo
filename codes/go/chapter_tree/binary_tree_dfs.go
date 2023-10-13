@@ -81,16 +81,17 @@ func postOrderIterate(node *TreeNode, data *[]any) {
 			currentNode = currentNode.Left
 		}
 
-		tmpNode := stack.Back().Value.(*TreeNode)
-		if tmpNode.Right != nil && tmpNode.Right != prev {
-			currentNode = tmpNode.Right
-			continue
-		}
+		if stack.Len() > 0 {
+			tmpNode := stack.Back().Value.(*TreeNode)
+			if tmpNode.Right != nil && tmpNode.Right != prev {
+				currentNode = tmpNode.Right
+				continue
+			}
 
-		stack.Remove(stack.Back())
-		*data = append(*data, tmpNode.Val)
-		prev = tmpNode
-		currentNode = nil
+			stack.Remove(stack.Back())
+			*data = append(*data, tmpNode.Val)
+			prev = tmpNode
+		}
 	}
 }
 
@@ -101,24 +102,49 @@ func inOrderIterate(node *TreeNode, data *[]any) {
 
 	// 左 -> 根 -> 右
 	stack := list.New()
-	currentNode := node
-	for currentNode != nil || stack.Len() > 0 {
-		for currentNode != nil && currentNode.Left != nil {
-			stack.PushBack(currentNode)
-			currentNode = currentNode.Left
+	root := node
+	for root != nil || stack.Len() > 0 {
+		for root != nil && root.Left != nil {
+			stack.PushBack(root)
+			root = root.Left
 		}
-		// 左
-		if currentNode != nil {
-			*data = append(*data, currentNode.Val)
+		if root != nil {
+			stack.PushBack(root)
 		}
 
-		// 根
 		if stack.Len() > 0 {
-			currentNode = stack.Remove(stack.Back()).(*TreeNode)
+			currentNode := stack.Remove(stack.Back()).(*TreeNode)
 			*data = append(*data, currentNode.Val)
+			root = currentNode.Right
+		}
+	}
+}
+
+func postOrderIterateV2(node *TreeNode, data *[]any) {
+	if node == nil {
+		return
+	}
+	// 左 -> 右 -> 根
+	stack := list.New()
+	root := node
+	var prev *TreeNode
+	for root != nil || stack.Len() > 0 {
+		for root != nil {
+			stack.PushBack(root)
+			root = root.Left
 		}
 
-		// 右
-		currentNode = currentNode.Right
+		if stack.Len() > 0 {
+			currentNode := stack.Back().Value.(*TreeNode)
+			if currentNode.Right == nil || currentNode.Right == prev {
+				stack.Remove(stack.Back())
+				*data = append(*data, currentNode.Val)
+
+				prev = currentNode
+				continue
+			}
+
+			root = currentNode.Right
+		}
 	}
 }
