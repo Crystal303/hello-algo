@@ -98,4 +98,8 @@ func TestTopKHeap(t *testing.T) {
 	res := topKHeap(nums, k)
 	fmt.Printf("最大的 " + strconv.Itoa(k) + " 个元素为")
 	PrintHeap(*res)
+
+	resV1 := TopKHeap(nums, k)
+	fmt.Printf("最大的 " + strconv.Itoa(k) + " 个元素为")
+	PrintHeap(resV1.toAny())
 }

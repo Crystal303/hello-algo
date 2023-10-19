@@ -42,4 +42,7 @@ func TestBinarySearchTree(t *testing.T) {
 	bst.remove(4)
 	fmt.Println("\n删除节点 4 后的二叉树为:")
 	bst.print()
+	bst.remove(8)
+	fmt.Println("\n删除节点 4 后的二叉树为:")
+	bst.print()
 }

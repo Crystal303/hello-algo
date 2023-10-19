@@ -12,6 +12,8 @@ import (
 
 var nums []any
 
+// 递归自上而下
+// 迭代自下而上
 /* 前序遍历 */
 func preOrder(node *TreeNode) {
 	if node == nil {
