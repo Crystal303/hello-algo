@@ -4,7 +4,9 @@
 
 package chapter_tree
 
-import . "github.com/krahets/hello-algo/pkg"
+import (
+	. "github.com/krahets/hello-algo/pkg"
+)
 
 /* AVL 树 */
 type aVLTree struct {
@@ -164,10 +166,16 @@ func (t *aVLTree) removeHelper(node *TreeNode, val int) *TreeNode {
 		} else {
 			// 子节点数量 = 2 ，则将中序遍历的下个节点删除，并用该节点替换当前节点
 			temp := node.Right
+			prev := node
 			for temp.Left != nil {
+				prev = temp
 				temp = temp.Left
 			}
-			node.Right = t.removeHelper(node.Right, temp.Val.(int))
+			if prev == node {
+				prev.Right = t.removeHelper(prev.Right, temp.Val.(int))
+			} else {
+				prev.Left = t.removeHelper(prev.Left, temp.Val.(int))
+			}
 			node.Val = temp.Val
 		}
 	}

@@ -35,10 +35,18 @@ func TestAVLTree(t *testing.T) {
 	testRemove(tree, 8) // 删除度为 0 的节点
 	testRemove(tree, 5) // 删除度为 1 的节点
 	testRemove(tree, 4) // 删除度为 2 的节点
+	testRemove(tree, 6)
 
 	/* 查询节点 */
 	node := tree.search(7)
 	fmt.Printf("\n查找到的节点对象为 %#v ，节点值 = %d \n", node, node.Val)
+
+	testRemove(tree, 7)
+	testRemove(tree, 2)
+	testRemove(tree, 9)
+	testRemove(tree, 1)
+	testRemove(tree, 3)
+	testRemove(tree, 10)
 }
 
 func testInsert(tree *aVLTree, val int) {
