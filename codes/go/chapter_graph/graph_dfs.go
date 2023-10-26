@@ -34,3 +34,29 @@ func graphDFS(g *graphAdjList, startVet Vertex) []Vertex {
 	// 返回顶点遍历序列
 	return res
 }
+
+func graphDFSV2(g *graphAdjList, startVet Vertex) []Vertex {
+	res := make([]Vertex, 0)
+	if _, ok := g.adjList[startVet]; !ok {
+		return res
+	}
+
+	visited := make(map[Vertex]struct{}, 0)
+	stack := make([]Vertex, 0)
+	stack = append(stack, startVet)
+	for 0 < len(stack) {
+		current := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+
+		res = append(res, current)
+		visited[current] = struct{}{}
+
+		for i := len(g.adjList[current]) - 1; 0 <= i; i-- {
+			if _, ok := visited[g.adjList[current][i]]; !ok {
+				stack = append(stack, g.adjList[current][i])
+			}
+		}
+	}
+
+	return res
+}

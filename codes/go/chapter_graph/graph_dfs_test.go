@@ -25,4 +25,9 @@ func TestGraphDFS(t *testing.T) {
 	res := graphDFS(graph, vets[0])
 	fmt.Println("深度优先遍历（DFS）顶点序列为:")
 	PrintSlice(VetsToVals(res))
+
+	/* 深度优先遍历 DFS */
+	res = graphDFSV2(graph, vets[0])
+	fmt.Println("深度优先遍历（DFS）顶点序列为:")
+	PrintSlice(VetsToVals(res))
 }
