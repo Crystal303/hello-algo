@@ -11,6 +11,6 @@ import (
 
 func TestInsertionSort(t *testing.T) {
 	nums := []int{4, 1, 3, 1, 5, 2}
-	insertionSort(nums)
+	insertionSortV2(nums)
 	fmt.Println("插入排序完成后 nums =", nums)
 }

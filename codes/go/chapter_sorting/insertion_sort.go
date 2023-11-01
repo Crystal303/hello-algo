@@ -18,3 +18,20 @@ func insertionSort(nums []int) {
 		nums[j+1] = base // 将 base 赋值到正确位置
 	}
 }
+
+/* 插入排序 从后往前*/
+func insertionSortV2(nums []int) {
+	if len(nums) < 1 {
+		return
+	}
+	for i := len(nums) - 2; 0 <= i; i-- {
+		base := nums[i]
+		j := i
+		// 往前挪
+		for j < len(nums)-1 && nums[j+1] < base {
+			nums[j] = nums[j+1]
+			j++
+		}
+		nums[j] = base
+	}
+}

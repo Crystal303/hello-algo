@@ -21,6 +21,10 @@ func TestBinarySearch(t *testing.T) {
 	if actual != expected {
 		t.Errorf("目标元素 6 的索引 = %d, 应该为 %d", actual, expected)
 	}
+	actual = binarySearchLCRO(nums, target)
+	if actual != expected {
+		t.Errorf("目标元素 6 的索引 = %d, 应该为 %d", actual, expected)
+	}
 }
 
 func TestBinarySearchEdge(t *testing.T) {
