@@ -50,3 +50,40 @@ func mergeSort(nums []int, left, right int) {
 	// 合并阶段
 	merge(nums, left, mid, right)
 }
+
+func mergeSortV1(nums []int, left, right int) {
+	if right <= left {
+		return
+	}
+	mid := left + (right-left)/2
+	mergeSortV1(nums, left, mid)
+	mergeSortV1(nums, mid+1, right)
+
+	mergeV1(nums, left, mid, right)
+}
+func mergeV1(nums []int, left, mid, right int) {
+	tmp := make([]int, right-left+1)
+	i, j, k := left, mid+1, 0
+	for i <= mid && j <= right {
+		if nums[i] <= nums[j] {
+			tmp[k] = nums[i]
+			i++
+		} else {
+			tmp[k] = nums[j]
+			j++
+		}
+		k++
+	}
+
+	for i <= mid {
+		tmp[k] = nums[i]
+		k++
+		i++
+	}
+	for j <= right {
+		tmp[k] = nums[j]
+		k++
+		j++
+	}
+	copy(nums[left:right+1], tmp)
+}
