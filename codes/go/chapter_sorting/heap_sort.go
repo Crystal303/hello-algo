@@ -42,3 +42,32 @@ func heapSort(nums *[]int) {
 		siftDown(nums, i, 0)
 	}
 }
+
+func heapSortV1(nums []int) {
+	// heap
+	for i := len(nums)/2 - 1; 0 <= i; i-- {
+		siftDownV1(nums, len(nums), i)
+	}
+	for i := len(nums) - 1; 0 < i; i-- {
+		nums[0], nums[i] = nums[i], nums[0]
+		siftDownV1(nums, i-1, 0)
+	}
+}
+
+func siftDownV1(nums []int, n int, i int) {
+	for {
+		lf, rh := 2*i+1, 2*i+2
+		idx := i
+		if lf < n && nums[idx] < nums[lf] {
+			idx = lf
+		}
+		if rh < n && nums[idx] < nums[rh] {
+			idx = rh
+		}
+		if idx == i {
+			return
+		}
+		nums[i], nums[idx] = nums[idx], nums[i]
+		i = idx
+	}
+}
