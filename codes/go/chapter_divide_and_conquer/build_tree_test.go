@@ -19,7 +19,7 @@ func TestBuildTree(t *testing.T) {
 	fmt.Print("中序遍历 = ")
 	PrintSlice(inorder)
 
-	root := buildTree(preorder, inorder)
+	root := buildTreeV1(preorder, inorder)
 	fmt.Println("构建的二叉树为：")
 	PrintTree(root)
 }
