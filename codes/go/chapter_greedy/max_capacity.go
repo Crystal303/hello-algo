@@ -26,3 +26,15 @@ func maxCapacity(ht []int) int {
 	}
 	return res
 }
+
+func maxCapacityV1(ht []int) int {
+	c := 0
+	for i := range ht {
+		for j := i + 1; j < len(ht); j++ {
+			if tmp := int(math.Min(float64(ht[j]), float64(ht[i]))) * (j - i); c < tmp {
+				c = tmp
+			}
+		}
+	}
+	return c
+}

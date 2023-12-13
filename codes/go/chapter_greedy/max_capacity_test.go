@@ -15,4 +15,7 @@ func TestMaxCapacity(t *testing.T) {
 	// 贪心算法
 	res := maxCapacity(ht)
 	fmt.Println("最大容量为", res)
+
+	res = maxCapacityV1(ht)
+	fmt.Println("最大容量为", res)
 }
